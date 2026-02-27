@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Emergency Donation Drive</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>🚨 Emergency Donation Drive</h2>
+
+<p>Active Disaster Relief Operation</p>
+
+<label>Donation Item:</label><br>
+<input type="text" id="item"><br><br>
+
+<label>Quantity:</label><br>
+<input type="number" id="qty"><br><br>
+
+<button onclick="submitEmergency()">Donate Now</button>
+
+<p id="msg"></p>
+
+<button onclick="location.href='index.html'">Back to Home</button>
+
+<script>
+function submitEmergency() {
+  document.getElementById("msg").innerText =
+    "Emergency donation recorded. Logistics team notified immediately.";
+}
+</script>
+
+</body>
+</html>

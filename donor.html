@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Donor Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <h3>❤️ Donor Dashboard</h3>
+</div>
+
+<div class="container">
+
+  <!-- Donation Form -->
+  <div class="box">
+    <h3>Add Donation</h3>
+
+    <label>Item Name</label><br>
+    <input type="text" id="item"><br><br>
+
+    <label>Quantity</label><br>
+    <input type="number" id="qty"><br><br>
+
+    <label>Category</label><br>
+    <select id="category">
+      <option value="">Select</option>
+      <option value="Food">Food</option>
+      <option value="Clothing">Clothing</option>
+      <option value="Medicine">Medicine</option>
+      <option value="Other">Other</option>
+    </select><br><br>
+
+    <button onclick="addDonation()">Add Donation</button>
+
+    <p id="msg" class="muted"></p>
+  </div>
+
+  <!-- My Donations -->
+  <div class="box">
+    <h3>My Donations</h3>
+    <div id="myDonations"></div>
+  </div>
+
+</div>
+
+<script>
+function addDonation() {
+  const item = document.getElementById("item").value;
+  const qty = document.getElementById("qty").value;
+  const category = document.getElementById("category").value;
+
+  if (!item || !qty || !category) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  const donation = {
+    item: item,
+    qty: qty,
+    category: category,
+    status: "Pending"
+  };
+
+  let donations = JSON.parse(localStorage.getItem("donations")) || [];
+  donations.push(donation);
+  localStorage.setItem("donations", JSON.stringify(donations));
+
+  document.getElementById("msg").innerText = "Donation added successfully";
+
+  document.getElementById("item").value = "";
+  document.getElementById("qty").value = "";
+  document.getElementById("category").value = "";
+
+  showMyDonations();
+}
+
+function showMyDonations() {
+  const donations = JSON.parse(localStorage.getItem("donations")) || [];
+  const container = document.getElementById("myDonations");
+  container.innerHTML = "";
+
+  if (donations.length === 0) {
+    container.innerHTML = "<p class='muted'>No donations added yet</p>";
+    return;
+  }
+
+  donations.forEach(d => {
+    const div = document.createElement("div");
+    div.className = "donation-item";
+    div.innerHTML = `
+      <b>${d.item}</b> (${d.category})<br>
+      Quantity: ${d.qty} | Status: ${d.status}
+    `;
+    container.appendChild(div);
+  });
+}
+
+showMyDonations();
+</script>
+
+</body>
+</html>

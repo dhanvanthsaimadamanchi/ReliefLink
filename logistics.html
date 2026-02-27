@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Logistics Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <h3>🚚 Logistics Dashboard</h3>
+  <button class="small-btn" onclick="location.href='index.html'">Back</button>
+</div>
+
+<div class="container">
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <p>Total Deliveries</p>
+      <h2 id="totalDeliveries">0</h2>
+    </div>
+    <div class="stat-card">
+      <p>Pending</p>
+      <h2 id="pendingCount">0</h2>
+    </div>
+    <div class="stat-card">
+      <p>In Transit</p>
+      <h2 id="transitCount">0</h2>
+    </div>
+    <div class="stat-card">
+      <p>Delivered</p>
+      <h2 id="deliveredCount">0</h2>
+    </div>
+  </div>
+
+  <!-- Deliveries -->
+  <div class="box">
+    <h3>Manage Deliveries</h3>
+    <p class="muted">Update delivery status of donated items</p>
+    <div id="deliveryList"></div>
+  </div>
+
+</div>
+
+<script>
+function loadDeliveries() {
+  const donations = JSON.parse(localStorage.getItem("donations")) || [];
+
+  const list = document.getElementById("deliveryList");
+  list.innerHTML = "";
+
+  let pending = 0, transit = 0, delivered = 0;
+
+  if (donations.length === 0) {
+    list.innerHTML = "<p class='muted'>No deliveries available</p>";
+    updateStats(0,0,0,0);
+    return;
+  }
+
+  donations.forEach((d, index) => {
+    if (d.status === "Pending") pending++;
+    if (d.status === "In Transit") transit++;
+    if (d.status === "Delivered") delivered++;
+
+    const div = document.createElement("div");
+    div.className = "donation-item";
+    div.innerHTML = `
+      <b>${d.item}</b> (${d.category})<br>
+      Quantity: ${d.qty}<br><br>
+
+      Status:
+      <select onchange="updateStatus(${index}, this.value)">
+        <option ${d.status==="Pending"?"selected":""}>Pending</option>
+        <option ${d.status==="In Transit"?"selected":""}>In Transit</option>
+        <option ${d.status==="Delivered"?"selected":""}>Delivered</option>
+      </select>
+    `;
+    list.appendChild(div);
+  });
+
+  updateStats(donations.length, pending, transit, delivered);
+}
+
+function updateStatus(index, status) {
+  const donations = JSON.parse(localStorage.getItem("donations")) || [];
+  donations[index].status = status;
+  localStorage.setItem("donations", JSON.stringify(donations));
+  loadDeliveries();
+}
+
+function updateStats(total, pending, transit, delivered) {
+  document.getElementById("totalDeliveries").innerText = total;
+  document.getElementById("pendingCount").innerText = pending;
+  document.getElementById("transitCount").innerText = transit;
+  document.getElementById("deliveredCount").innerText = delivered;
+}
+
+loadDeliveries();
+</script>
+
+</body>
+</html>

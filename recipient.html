@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Recipient Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <h3>👥 Recipient Dashboard</h3>
+  <button class="small-btn" onclick="location.href='index.html'">Back</button>
+</div>
+
+<div class="container">
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <p>Available Items</p>
+      <h2 id="totalItems">0</h2>
+    </div>
+
+    <div class="stat-card">
+      <p>Pending</p>
+      <h2 id="pendingItems">0</h2>
+    </div>
+
+    <div class="stat-card">
+      <p>In Transit</p>
+      <h2 id="transitItems">0</h2>
+    </div>
+
+    <div class="stat-card">
+      <p>Delivered</p>
+      <h2 id="deliveredItems">0</h2>
+    </div>
+  </div>
+
+  <!-- Available Donations -->
+  <div class="box">
+    <h3>Available Donations</h3>
+    <p class="muted">Items donated by donors</p>
+    <div id="donationList"></div>
+  </div>
+
+</div>
+
+<script>
+const donations = JSON.parse(localStorage.getItem("donations")) || [];
+
+const list = document.getElementById("donationList");
+
+let pending = 0, transit = 0, delivered = 0;
+
+if (donations.length === 0) {
+  list.innerHTML = "<p class='muted'>No donations available yet</p>";
+} else {
+  donations.forEach(d => {
+    if (d.status === "Pending") pending++;
+    if (d.status === "In Transit") transit++;
+    if (d.status === "Delivered") delivered++;
+
+    const div = document.createElement("div");
+    div.className = "donation-item";
+    div.innerHTML = `
+      <b>${d.item}</b> (${d.category})<br>
+      Quantity: ${d.qty}<br>
+      Status: <span class="badge orange">${d.status}</span>
+    `;
+    list.appendChild(div);
+  });
+}
+
+document.getElementById("totalItems").innerText = donations.length;
+document.getElementById("pendingItems").innerText = pending;
+document.getElementById("transitItems").innerText = transit;
+document.getElementById("deliveredItems").innerText = delivered;
+</script>
+
+</body>
+</html>

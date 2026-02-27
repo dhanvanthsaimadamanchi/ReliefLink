@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <h3>🛡 Admin Dashboard</h3>
+  <button class="small-btn">Manage Drives</button>
+</div>
+
+<div class="container">
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <p>Total Donations</p>
+      <h2 id="totalDonations">0</h2>
+    </div>
+  </div>
+
+  <!-- Donations List -->
+  <div class="box">
+    <h3>All Donations</h3>
+    <p class="muted">Donations submitted by donors</p>
+    <div id="adminDonations"></div>
+  </div>
+
+</div>
+
+<script>
+const donations = JSON.parse(localStorage.getItem("donations")) || [];
+const list = document.getElementById("adminDonations");
+document.getElementById("totalDonations").innerText = donations.length;
+
+if (donations.length === 0) {
+  list.innerHTML = "<p class='muted'>No donations available</p>";
+} else {
+  donations.forEach((d, index) => {
+    const div = document.createElement("div");
+    div.className = "donation-item";
+    div.innerHTML = `
+      <b>${d.item}</b> (${d.category})<br>
+      Quantity: ${d.qty} <br>
+      Status: <span class="badge orange">${d.status}</span>
+    `;
+    list.appendChild(div);
+  });
+}
+</script>
+
+</body>
+</html>

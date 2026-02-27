@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ReliefLink Login</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h1>ReliefLink Login</h1>
+
+<label>Username:</label><br>
+<input type="text" id="username"><br><br>
+
+<label>Password:</label><br>
+<input type="password" id="password"><br><br>
+
+<label>Select Role:</label><br>
+<select id="role">
+  <option value="">-- Select Role --</option>
+  <option value="admin.html">Admin</option>
+  <option value="donor.html">Donor</option>
+  <option value="recipient.html">Recipient</option>
+  <option value="logistics.html">Logistics</option>
+</select>
+
+<br><br>
+
+<button onclick="login()">Login</button>
+
+<p id="msg"></p>
+
+<script>
+function login() {
+  var user = document.getElementById("username").value;
+  var pass = document.getElementById("password").value;
+  var role = document.getElementById("role").value;
+
+  if (user === "" || pass === "" || role === "") {
+    document.getElementById("msg").innerText =
+      "Please fill all fields.";
+    return;
+  }
+
+  document.getElementById("msg").innerText =
+    "Login successful! Redirecting...";
+
+  setTimeout(function() {
+    window.location.href = role;
+  }, 1000);
+}
+</script>
+
+</body>
+</html>
