@@ -3,30 +3,269 @@
 <head>
   <title>Emergency Donation Drive</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .emergency-banner {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      padding: 40px 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    
+    .emergency-banner h2 { margin: 0; font-size: 32px; letter-spacing: 1px; }
+    .emergency-banner p { margin: 12px 0 0 0; font-size: 18px; opacity: 0.95; }
+    
+    .urgency-indicator {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    
+    .form-section {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      margin-bottom: 30px;
+      border-top: 4px solid #dc2626;
+    }
+    
+    .form-section h3 { margin-top: 0; color: #111827; }
+    .form-description { color: #6b7280; font-size: 14px; margin-bottom: 25px; }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .form-group {
+      margin-bottom: 0;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #374151;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #dc2626;
+      background: #fef2f2;
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      padding: 14px 40px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      transition: 0.3s;
+    }
+    
+    .submit-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(220, 38, 38, 0.3);
+    }
+    
+    .success-msg {
+      background: #dcfce7;
+      color: #166534;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border-left: 4px solid #10b981;
+      display: none;
+    }
+    
+    .success-msg.show {
+      display: block;
+      animation: slideIn 0.3s ease-in;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .info-box {
+      background: #f0f9ff;
+      border-left: 4px solid #0284c7;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 30px;
+      color: #0c4a6e;
+    }
+    
+    .info-box p { margin: 0; }
+    
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #6b7280;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .back-btn:hover {
+      background: #4b5563;
+    }
+  </style>
 </head>
 <body>
 
-<h2>🚨 Emergency Donation Drive</h2>
+<!-- Top Bar -->
+<div class="topbar">
+  <h3>🚨 Emergency Donation Drive</h3>
+  <button class="small-btn" onclick="location.href='index.html'">Home</button>
+</div>
 
-<p>Active Disaster Relief Operation</p>
+<div class="container">
 
-<label>Donation Item:</label><br>
-<input type="text" id="item"><br><br>
+  <!-- Emergency Banner -->
+  <div class="emergency-banner">
+    <h2>🚨 URGENT: Relief Operation Active 🚨</h2>
+    <p>Immediate aid needed - Your donation can save lives!</p>
+    <div class="urgency-indicator">⚠️ Time-sensitive operation - contribute now!</div>
+  </div>
 
-<label>Quantity:</label><br>
-<input type="number" id="qty"><br><br>
+  <!-- Info Box -->
+  <div class="info-box">
+    <p>💡 <strong>Your prompt donation is critical.</strong> Items received will be immediately prepared for emergency distribution. Thank you for your compassion and swift action!</p>
+  </div>
 
-<button onclick="submitEmergency()">Donate Now</button>
+  <!-- Emergency Donation Form -->
+  <div class="form-section">
+    <h3>📦 Submit Emergency Donation</h3>
+    <p class="form-description">Fill out the details below to contribute vital supplies to those in urgent need</p>
 
-<p id="msg"></p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Item Name *</label>
+        <input type="text" id="item" placeholder="e.g., Medical Supplies, Food Packs, Water Containers">
+      </div>
+      <div class="form-group">
+        <label>Quantity *</label>
+        <input type="number" id="qty" min="1" placeholder="e.g., 50">
+      </div>
+    </div>
 
-<button onclick="location.href='index.html'">Back to Home</button>
+    <div class="form-group">
+      <label>Additional Details (optional)</label>
+      <textarea id="details" placeholder="Any special information about your donation (e.g., expiry date, special handling requirements)"></textarea>
+    </div>
+
+    <button class="submit-btn" onclick="submitEmergency()">⚡ Submit Emergency Donation</button>
+
+    <div id="msg" class="success-msg">
+      <strong>✅ Success!</strong> Your emergency donation has been recorded and logistics team has been notified immediately. Thank you for your life-saving contribution!
+    </div>
+  </div>
+
+</div>
 
 <script>
 function submitEmergency() {
-  document.getElementById("msg").innerText =
-    "Emergency donation recorded. Logistics team notified immediately.";
+  const item = document.getElementById("item").value.trim();
+  const qty = document.getElementById("qty").value.trim();
+  const details = document.getElementById("details").value.trim();
+
+  if (!item || !qty) {
+    alert("⚠️ Please fill in Item Name and Quantity");
+    return;
+  }
+
+  if (qty <= 0) {
+    alert("⚠️ Quantity must be greater than 0");
+    return;
+  }
+
+  const donation = {
+    item: item,
+    qty: qty,
+    category: "Emergency",
+    status: "Pending",
+    details: details,
+    dateAdded: new Date().toLocaleDateString(),
+    isEmergency: true
+  };
+
+  let donations = JSON.parse(localStorage.getItem("donations")) || [];
+  donations.push(donation);
+  localStorage.setItem("donations", JSON.stringify(donations));
+
+  // Show success message
+  const msgElement = document.getElementById("msg");
+  msgElement.classList.add("show");
+
+  // Clear form
+  document.getElementById("item").value = "";
+  document.getElementById("qty").value = "";
+  document.getElementById("details").value = "";
+
+  // Hide message after 5 seconds
+  setTimeout(() => {
+    msgElement.classList.remove("show");
+  }, 5000);
 }
+
+// Allow Enter key to submit form
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById("qty").addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') submitEmergency();
+  });
+});
 </script>
 
 </body>

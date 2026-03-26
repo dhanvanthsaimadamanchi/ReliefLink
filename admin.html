@@ -3,52 +3,315 @@
 <head>
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .admin-header {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .admin-header h2 { margin: 0; font-size: 24px; }
+    .admin-header p { margin: 8px 0 0 0; opacity: 0.9; }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      text-align: center;
+      border-left: 4px solid #8b5cf6;
+    }
+    
+    .stat-card h4 { margin: 0 0 10px 0; color: #6b7280; font-size: 14px; }
+    .stat-card .number { font-size: 32px; font-weight: bold; color: #8b5cf6; margin: 10px 0; }
+    .stat-card p { margin: 8px 0 0 0; color: #6b7280; font-size: 13px; }
+    
+    .donations-section {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      margin-bottom: 30px;
+    }
+    
+    .donations-section h3 { margin-top: 0; color: #111827; }
+    .section-description { color: #6b7280; font-size: 14px; margin-bottom: 20px; }
+    
+    .donation-item {
+      background: #f9fafb;
+      padding: 18px;
+      border-radius: 8px;
+      margin-top: 12px;
+      border-left: 4px solid #8b5cf6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .donation-info {
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .donation-info b {
+      display: block;
+      color: #111827;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    
+    .donation-info p {
+      margin: 4px 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .action-btn {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+    
+    .btn-approve {
+      background: #dcfce7;
+      color: #166534;
+    }
+    
+    .btn-approve:hover {
+      background: #bbf7d0;
+    }
+    
+    .btn-decline {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .btn-decline:hover {
+      background: #fecaca;
+    }
+    
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-accepted { background: #dcfce7; color: #166534; }
+    .status-delivered { background: #dbeafe; color: #1e40af; }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6b7280;
+    }
+    
+    .filter-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      padding: 8px 16px;
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: 0.2s;
+    }
+    
+    .filter-btn.active {
+      background: #8b5cf6;
+      color: white;
+      border-color: #8b5cf6;
+    }
+  </style>
 </head>
 <body>
 
+<!-- Top Bar -->
 <div class="topbar">
   <h3>🛡 Admin Dashboard</h3>
-  <button class="small-btn">Manage Drives</button>
+  <button class="small-btn" onclick="location.href='index.html'">Back to Home</button>
 </div>
 
 <div class="container">
 
-  <!-- Stats -->
-  <div class="stats">
+  <!-- Admin Header -->
+  <div class="admin-header">
+    <h2>System Administration & Oversight</h2>
+    <p>Monitor all donations, manage status updates, and ensure smooth operations</p>
+  </div>
+
+  <!-- Statistics -->
+  <div class="stats-grid">
     <div class="stat-card">
-      <p>Total Donations</p>
-      <h2 id="totalDonations">0</h2>
+      <h4>Total Donations</h4>
+      <div class="number" id="totalDonations">0</div>
+      <p>Items received</p>
+    </div>
+    <div class="stat-card">
+      <h4>Total Quantity</h4>
+      <div class="number" id="totalQty">0</div>
+      <p>Units in system</p>
+    </div>
+    <div class="stat-card">
+      <h4>Pending Review</h4>
+      <div class="number" id="pendingReview">0</div>
+      <p>Awaiting approval</p>
+    </div>
+    <div class="stat-card">
+      <h4>Resolved</h4>
+      <div class="number" id="resolvedCount">0</div>
+      <p>Accepted & Delivered</p>
     </div>
   </div>
 
-  <!-- Donations List -->
-  <div class="box">
-    <h3>All Donations</h3>
-    <p class="muted">Donations submitted by donors</p>
+  <!-- Donations Management -->
+  <div class="donations-section">
+    <h3>📋 All Donations Management</h3>
+    <p class="section-description">Review and manage donations submitted by donors</p>
+    
+    <div class="filter-controls">
+      <button class="filter-btn active" onclick="filterDonations('all')">All</button>
+      <button class="filter-btn" onclick="filterDonations('pending')">Pending</button>
+      <button class="filter-btn" onclick="filterDonations('accepted')">Accepted</button>
+      <button class="filter-btn" onclick="filterDonations('delivered')">Delivered</button>
+    </div>
+    
     <div id="adminDonations"></div>
   </div>
 
 </div>
 
 <script>
-const donations = JSON.parse(localStorage.getItem("donations")) || [];
-const list = document.getElementById("adminDonations");
-document.getElementById("totalDonations").innerText = donations.length;
+let currentFilter = 'all';
 
-if (donations.length === 0) {
-  list.innerHTML = "<p class='muted'>No donations available</p>";
-} else {
-  donations.forEach((d, index) => {
+function updateStatistics() {
+  const donations = JSON.parse(localStorage.getItem("donations")) || [];
+  
+  let totalQty = 0;
+  let pendingCount = 0;
+  let resolvedCount = 0;
+  
+  donations.forEach(d => {
+    totalQty += parseInt(d.qty) || 0;
+    if (d.status === "Pending") {
+      pendingCount++;
+    }
+    if (d.status === "Accepted" || d.status === "Delivered") {
+      resolvedCount++;
+    }
+  });
+  
+  document.getElementById("totalDonations").innerText = donations.length;
+  document.getElementById("totalQty").innerText = totalQty;
+  document.getElementById("pendingReview").innerText = pendingCount;
+  document.getElementById("resolvedCount").innerText = resolvedCount;
+}
+
+function getStatusBadgeClass(status) {
+  switch(status) {
+    case "Accepted": return "status-accepted";
+    case "Delivered": return "status-delivered";
+    default: return "status-pending";
+  }
+}
+
+function filterDonations(filter) {
+  currentFilter = filter;
+  
+  // Update active button
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  displayDonations();
+}
+
+function displayDonations() {
+  const donations = JSON.parse(localStorage.getItem("donations")) || [];
+  const container = document.getElementById("adminDonations");
+  container.innerHTML = "";
+
+  if (donations.length === 0) {
+    container.innerHTML = '<div class="empty-state"><p>📭 No donations in the system yet</p></div>';
+    return;
+  }
+
+  const filtered = donations.filter(d => {
+    if (currentFilter === 'all') return true;
+    return d.status === currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1);
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty-state"><p>📭 No donations with this status</p></div>';
+    return;
+  }
+
+  filtered.forEach((d, index) => {
+    const actualIndex = donations.indexOf(d);
     const div = document.createElement("div");
     div.className = "donation-item";
     div.innerHTML = `
-      <b>${d.item}</b> (${d.category})<br>
-      Quantity: ${d.qty} <br>
-      Status: <span class="badge orange">${d.status}</span>
+      <div class="donation-info">
+        <b>${d.item}</b>
+        <p>📦 Category: ${d.category}</p>
+        <p>📊 Quantity: ${d.qty}</p>
+        <p>📅 Date: ${d.dateAdded || 'N/A'}</p>
+        <p>Status: <span class="status-badge ${getStatusBadgeClass(d.status)}">${d.status}</span></p>
+      </div>
+      <div class="action-buttons">
+        ${d.status === "Pending" ? `
+          <button class="action-btn btn-approve" onclick="updateDonationStatus(${actualIndex}, 'Accepted')">✓ Approve</button>
+          <button class="action-btn btn-decline" onclick="updateDonationStatus(${actualIndex}, 'Pending')">Pending</button>
+        ` : `
+          <select onchange="updateDonationStatus(${actualIndex}, this.value)" style="padding: 8px; border-radius: 6px; border: 1px solid #d1d5db;">
+            <option value="Accepted" ${d.status === "Accepted" ? 'selected' : ''}>Accepted</option>
+            <option value="Delivered" ${d.status === "Delivered" ? 'selected' : ''}>Delivered</option>
+          </select>
+        `}
+      </div>
     `;
-    list.appendChild(div);
+    container.appendChild(div);
   });
 }
+
+function updateDonationStatus(index, newStatus) {
+  const donations = JSON.parse(localStorage.getItem("donations")) || [];
+  donations[index].status = newStatus;
+  localStorage.setItem("donations", JSON.stringify(donations));
+  updateStatistics();
+  displayDonations();
+}
+
+updateStatistics();
+displayDonations();
 </script>
 
 </body>

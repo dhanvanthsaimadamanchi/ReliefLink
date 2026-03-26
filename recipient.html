@@ -3,78 +3,310 @@
 <head>
   <title>Recipient Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .recipient-header {
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .recipient-header h2 { margin: 0; font-size: 24px; }
+    .recipient-header p { margin: 8px 0 0 0; opacity: 0.9; }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      text-align: center;
+      border-left: 4px solid #ea580c;
+    }
+    
+    .stat-card h4 { margin: 0 0 10px 0; color: #6b7280; font-size: 14px; }
+    .stat-card .number { font-size: 32px; font-weight: bold; color: #ea580c; margin: 10px 0; }
+    .stat-card p { margin: 8px 0 0 0; color: #6b7280; font-size: 13px; }
+    
+    .donations-section {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      margin-bottom: 30px;
+    }
+    
+    .donations-section h3 { margin-top: 0; color: #111827; }
+    .section-description { color: #6b7280; font-size: 14px; margin-bottom: 20px; }
+    
+    .filter-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      padding: 8px 16px;
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: 0.2s;
+    }
+    
+    .filter-btn:hover {
+      background: #f3f4f6;
+    }
+    
+    .filter-btn.active {
+      background: #ea580c;
+      color: white;
+      border-color: #ea580c;
+    }
+    
+    .donation-card {
+      background: #f9fafb;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border-left: 4px solid #ea580c;
+      transition: 0.3s;
+    }
+    
+    .donation-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .card-header b {
+      color: #111827;
+      font-size: 16px;
+    }
+    
+    .card-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 12px;
+    }
+    
+    .card-details p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-block;
+    }
+    
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-transit { background: #bfdbfe; color: #1e40af; }
+    .status-delivered { background: #dcfce7; color: #166534; }
+    
+    .category-badge {
+      display: inline-block;
+      background: #f0f9ff;
+      color: #0c4a6e;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-right: 8px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6b7280;
+    }
+    
+    .availability-bar {
+      background: #e5e7eb;
+      height: 8px;
+      border-radius: 4px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    
+    .availability-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ea580c, #c2410c);
+      transition: width 0.3s;
+    }
+  </style>
 </head>
 <body>
 
+<!-- Top Bar -->
 <div class="topbar">
   <h3>👥 Recipient Dashboard</h3>
-  <button class="small-btn" onclick="location.href='index.html'">Back</button>
+  <button class="small-btn" onclick="location.href='index.html'">Back to Home</button>
 </div>
 
 <div class="container">
 
-  <!-- Stats -->
-  <div class="stats">
-    <div class="stat-card">
-      <p>Available Items</p>
-      <h2 id="totalItems">0</h2>
-    </div>
+  <!-- Recipient Header -->
+  <div class="recipient-header">
+    <h2>Request & Receive Assistance</h2>
+    <p>Browse available donations and request the items you need</p>
+  </div>
 
+  <!-- Statistics -->
+  <div class="stats-grid">
     <div class="stat-card">
-      <p>Pending</p>
-      <h2 id="pendingItems">0</h2>
+      <h4>Available Items</h4>
+      <div class="number" id="totalItems">0</div>
+      <p>Ready to receive</p>
     </div>
-
     <div class="stat-card">
-      <p>In Transit</p>
-      <h2 id="transitItems">0</h2>
+      <h4>Pending</h4>
+      <div class="number" id="pendingItems">0</div>
+      <p>Being prepared</p>
     </div>
-
     <div class="stat-card">
-      <p>Delivered</p>
-      <h2 id="deliveredItems">0</h2>
+      <h4>In Transit</h4>
+      <div class="number" id="transitItems">0</div>
+      <p>On the way</p>
+    </div>
+    <div class="stat-card">
+      <h4>Delivered</h4>
+      <div class="number" id="deliveredItems">0</div>
+      <p>Already received</p>
     </div>
   </div>
 
   <!-- Available Donations -->
-  <div class="box">
-    <h3>Available Donations</h3>
-    <p class="muted">Items donated by donors</p>
+  <div class="donations-section">
+    <h3>📦 Available Donations</h3>
+    <p class="section-description">Browse items donated by generous donors in your community</p>
+    
+    <div class="filter-controls">
+      <button class="filter-btn active" onclick="filterItems('all')">All Items</button>
+      <button class="filter-btn" onclick="filterItems('Food')">🍞 Food</button>
+      <button class="filter-btn" onclick="filterItems('Clothing')">👕 Clothing</button>
+      <button class="filter-btn" onclick="filterItems('Medicine')">💊 Medicine</button>
+      <button class="filter-btn" onclick="filterItems('Other')">📦 Other</button>
+    </div>
+    
     <div id="donationList"></div>
   </div>
 
 </div>
 
 <script>
-const donations = JSON.parse(localStorage.getItem("donations")) || [];
+let currentFilter = 'all';
 
-const list = document.getElementById("donationList");
+function getStatusBadgeClass(status) {
+  switch(status) {
+    case "In Transit": return "status-transit";
+    case "Delivered": return "status-delivered";
+    default: return "status-pending";
+  }
+}
 
-let pending = 0, transit = 0, delivered = 0;
+function updateStatistics() {
+  const donations = JSON.parse(localStorage.getItem("donations")) || [];
+  
+  let pending = 0, transit = 0, delivered = 0;
 
-if (donations.length === 0) {
-  list.innerHTML = "<p class='muted'>No donations available yet</p>";
-} else {
   donations.forEach(d => {
     if (d.status === "Pending") pending++;
     if (d.status === "In Transit") transit++;
     if (d.status === "Delivered") delivered++;
+  });
 
+  document.getElementById("totalItems").innerText = donations.length;
+  document.getElementById("pendingItems").innerText = pending;
+  document.getElementById("transitItems").innerText = transit;
+  document.getElementById("deliveredItems").innerText = delivered;
+}
+
+function filterItems(category) {
+  currentFilter = category;
+  
+  // Update active button
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  displayDonations();
+}
+
+function displayDonations() {
+  const donations = JSON.parse(localStorage.getItem("donations")) || [];
+  const list = document.getElementById("donationList");
+  list.innerHTML = "";
+
+  if (donations.length === 0) {
+    list.innerHTML = '<div class="empty-state"><p>🎁 No donations available yet. Please check back soon!</p></div>';
+    return;
+  }
+
+  const filtered = donations.filter(d => {
+    if (currentFilter === 'all') return true;
+    return d.category === currentFilter;
+  });
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state"><p>No items found in this category</p></div>';
+    return;
+  }
+
+  filtered.forEach((d, index) => {
     const div = document.createElement("div");
-    div.className = "donation-item";
+    div.className = "donation-card";
+    
+    const statusColor = d.status === "Pending" ? "#fef3c7" : d.status === "In Transit" ? "#bfdbfe" : "#dcfce7";
+    
     div.innerHTML = `
-      <b>${d.item}</b> (${d.category})<br>
-      Quantity: ${d.qty}<br>
-      Status: <span class="badge orange">${d.status}</span>
+      <div class="card-header">
+        <b>${d.item}</b>
+        <span class="status-badge ${getStatusBadgeClass(d.status)}">${d.status}</span>
+      </div>
+      
+      <div>
+        <span class="category-badge">${d.category}</span>
+      </div>
+      
+      <div class="card-details">
+        <p>📦 <strong>Quantity Available:</strong> ${d.qty} units</p>
+        <p>📅 <strong>Listed:</strong> ${d.dateAdded || 'Recently'}</p>
+        <p>✓ <strong>Status:</strong> ${d.status}</p>
+      </div>
+
+      <div class="availability-bar">
+        <div class="availability-fill" style="width: ${d.status === "Pending" ? 60 : d.status === "In Transit" ? 80 : 100}%"></div>
+      </div>
     `;
     list.appendChild(div);
   });
 }
 
-document.getElementById("totalItems").innerText = donations.length;
-document.getElementById("pendingItems").innerText = pending;
-document.getElementById("transitItems").innerText = transit;
-document.getElementById("deliveredItems").innerText = delivered;
+updateStatistics();
+displayDonations();
 </script>
 
 </body>
